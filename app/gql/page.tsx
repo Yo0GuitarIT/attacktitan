@@ -1,5 +1,6 @@
 "use client";
 import { gql, useMutation } from "@apollo/client";
+import { useState } from "react";
 
 const SEND_CODE = gql`
   mutation SendCode($code: String!) {
@@ -11,6 +12,7 @@ const SEND_CODE = gql`
 
 function GglPage() {
   const [sendCode, { data, loading, error }] = useMutation(SEND_CODE);
+  const [value, setValue] = useState("");
 
   const handleSubmit = async (code: string) => {
     try {
@@ -20,7 +22,6 @@ function GglPage() {
       if (success) {
         console.log(success);
       } else {
-       
         console.error("Failed to send code.");
       }
     } catch (err) {
@@ -33,7 +34,12 @@ function GglPage() {
       <h1>Send Code </h1>
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
-      <button onClick={() => handleSubmit("8787")}>Send Code</button>
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <button onClick={() => handleSubmit(value)}>Send Code</button>
     </div>
   );
 }
